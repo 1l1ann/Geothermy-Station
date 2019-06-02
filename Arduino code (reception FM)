@@ -1,0 +1,60 @@
+#include <VirtualWire.h>
+#include <Wire.h>
+
+void setup() {
+  Serial.begin(115200);
+  Wire.begin();
+  vw_set_rx_pin(2);
+  vw_setup(2000);
+  vw_rx_start(); // On peut maintenant recevoir des messages
+
+  Serial.println("Go !");
+}
+
+void loop() {
+  float valeur;
+  byte taille_message = sizeof(float);
+  int i = 1;
+  
+  vw_wait_rx();
+
+  if (vw_get_message((byte *) &valeur, &taille_message)) {
+    // On copie le message, qu'il soit corrompu ou non
+    Serial.print("Sensor n° ");
+    Serial.print(i);
+    Serial.print(" temperature : ");
+    Serial.println(valeur); // Affiche le message
+    i++;
+  }
+  vw_wait_rx();
+
+  if (vw_get_message((byte *) &valeur, &taille_message)) {
+    // On copie le message, qu'il soit corrompu ou non
+    Serial.print("Sensor n° ");
+    Serial.print(i);
+    Serial.print(" temperature : ");
+    Serial.println(valeur); // Affiche le message
+    i++;
+  }
+  vw_wait_rx();
+
+  if (vw_get_message((byte *) &valeur, &taille_message)) {
+    // On copie le message, qu'il soit corrompu ou non
+    Serial.print("Sensor n° ");
+    Serial.print(i);
+    Serial.print(" temperature : ");
+    Serial.println(valeur); // Affiche le message
+    i++;
+  }
+  vw_wait_rx();
+
+  if (vw_get_message((byte *) &valeur, &taille_message)) {
+    // On copie le message, qu'il soit corrompu ou non
+    Serial.print("Sensor n° ");
+    Serial.print(i);
+    Serial.print(" temperature : ");
+    Serial.println(valeur); // Affiche le message
+    Serial.println(" ");
+    i++;
+  }
+}
