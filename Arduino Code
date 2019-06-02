@@ -294,7 +294,7 @@ void loop() {
 // Fonction qui envoie les données sur le Google Sheet
 void kemasData1() {
   data += "";
-  data += "GET /pushingbox?devid=v85FC485AB997E40&Temperature1="; //GET request query to pushingbox API
+  data += "GET /pushingbox?devid=vAB9C7B48C944888&Temperature1="; //GET request query to pushingbox API
   data += temp1;
   data += "&Temperature2=";
   data += temp2;
@@ -304,26 +304,6 @@ void kemasData1() {
   data += temp4;
   data += " HTTP/1.1";
 }
-
-void kemasData2() {
-  data += "";
-  data += "GET /pushingbox?devid=v7E7855574170AC7&Temperature2="; //GET request query to pushingbox API
-  data += temp2;
-  data += " HTTP/1.1";
-}
-void kemasData3() {
-  data += "";
-  data += "GET /pushingbox?devid=vA19F16C0D96D2D6&Temperature3="; //GET request query to pushingbox API
-  data += temp3;
-  data += " HTTP/1.1";
-}
-void kemasData4() {
-  data += "";
-  data += "GET /pushingbox?devid=vF51512356CB51EC&Temperature4="; //GET request query to pushingbox API
-  data += temp4;
-  data += " HTTP/1.1";
-}
-
 
 // Fonction qui envoie les données à PushingBox
 void sendData() {
