@@ -1,9 +1,12 @@
 #include <VirtualWire.h>
-#include <Wire.h>
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 2, 3, 6, 5);
 
 void setup() {
   Serial.begin(115200);
-  Wire.begin();
+    lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
   vw_set_rx_pin(2);
   vw_setup(2000);
   vw_rx_start(); // On peut maintenant recevoir des messages
@@ -57,4 +60,21 @@ void loop() {
     Serial.println(" ");
     i++;
   }
+  
+    lcd.print("Sensor 1 : ");
+  lcd.print(temp1);
+  lcd.setCursor(0, 1);
+  lcd.print("Sensor 2 : ");
+  lcd.print(temp2);
+  delay(1000);
+  lcd.clear();
+  
+  lcd.print("Sensor 3 : ");
+  lcd.print(temp3);
+  lcd.setCursor(0, 1);
+  lcd.print("Sensor 4 : ");
+  lcd.print(temp4);
+  delay(1000);
+  lcd.clear();
+  
 }
