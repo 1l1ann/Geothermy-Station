@@ -1,0 +1,49 @@
+#include <SPI.h>
+#include <SD.h>
+
+File myFile;
+
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(pinTemp, INPUT);
+  //Set current time;
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+
+  Serial.print("Initializing SD card...");
+
+  if (!SD.begin(10)) {
+    Serial.println("initialization failed!");
+    while (1);
+  }
+  Serial.println("initialization done.");
+
+  if (SD.exists("1.txt")) {
+    Serial.println("1.txt exists.");
+  } else {
+    Serial.println("1.txt doesn't exist.");
+    Serial.println("Creating 1.txt...");
+    if (SD.exists("1.txt")) {
+      Serial.println("1.txt exists.");
+    } else {
+      Serial.println("1.txt doesn't exist.");
+    }
+  }
+}
+void loop() {
+  int temp = analogRead(pinTemp);
+  Serial.print("Temperature measure : ");
+  Serial.print(temp);
+  Serial.println();
+  myFile = SD.open("1.txt", FILE_WRITE);
+  if (myFile) {
+    myFile.print("Temperature measure : ");
+    myFile.println(temp);
+    myFile.close();
+  }
+  else {
+    Serial.println("error opening test.txt");
+  }
+}
