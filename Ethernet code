@@ -1,0 +1,66 @@
+#include <SPI.h>
+#include <Ethernet.h>
+//-------------------------------------------------------------------------------
+byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED }; //Setting MAC Address
+char server[] = "api.pushingbox.com"; //pushingbox API server
+
+IPAddress ip(192, 168, 1, 2); //Arduino IP address. Only used when DHCP is turned off.
+EthernetClient client; //define 'client' as object
+String data; //GET query with data
+float suhu; //suhu (bahasa Indonesia) means temperature
+boolean koneksi = false;
+//------------------------------------------------------------------------------
+void setup() {
+  Serial.begin(115200);
+  if (Ethernet.begin(mac) == 0) {
+    Serial.println("Failed to configure Ethernet using DHCP");
+    Ethernet.begin(mac, ip);
+  }
+  delay(1000);
+}
+//------------------------------------------------------------------------------
+void loop() {
+  int baca_ADC = analogRead(5); //read analog input on pin A7
+  suhu = baca_ADC; // ADC to celcius conversion
+  kemasData(); //packing GET query with data
+  Serial.println(suhu);
+  Serial.println("connecting...");
+  if (client.connect(server, 80)) {
+    sendData();
+    koneksi = true; //connected = true
+  }
+  else {
+    Serial.println("connection failed");
+  }
+  // loop
+  while (koneksi) {
+    if (client.available()) {
+      char c = client.read(); //save http header to c
+      Serial.print(c); //print http header to serial monitor
+    }
+    if (!client.connected()) {
+      Serial.println();
+      Serial.println("disconnecting.");
+      Serial.print("Temperature Sent :");
+      Serial.println(suhu); //print sent value to serial monitor
+      client.stop();
+      koneksi = false;
+      data = ""; //data reset
+    }
+  }
+  delay(5000); // interval
+}
+
+void kemasData() {
+  data += "";
+  data += "GET /pushingbox?devid=vB44C6E01EAA2093&Temperature="; //GET request query to pushingbox API
+  data += suhu;
+  data += " HTTP/1.1";
+}
+void sendData() {
+  Serial.println("connected");
+  client.println(data);
+  client.println("Host: api.pushingbox.com");
+  client.println("Connection: close");
+  client.println();
+}
